@@ -3,7 +3,7 @@ import { apiRequest } from "./generators/prompts";
 // Configure the OpenAI client
 const API_URL = process.env.AZURE_OPENAI_ENDPOINT || "";
 const API_KEY = process.env.AZURE_OPENAI_API_KEY || "";
-const API_MODEL = process.env.AZURE_OPENAI_MODEL || "o4-mini";
+const API_MODEL = process.env.AZURE_OPENAI_MODEL || "o3-mini";
 const API_VERSION = process.env.AZURE_OPENAI_API_VERSION || "2023-05-15";
 
 if (!API_URL || !API_KEY) {
