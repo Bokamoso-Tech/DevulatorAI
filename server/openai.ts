@@ -1,9 +1,7 @@
-// Import necessary modules for OpenAI API integration
-
-// Configure the OpenAI client
+// Configure the Azure OpenAI client
 const API_URL = process.env.AZURE_OPENAI_ENDPOINT || "";
 const API_KEY = process.env.AZURE_OPENAI_API_KEY || "";
-const API_MODEL = process.env.AZURE_OPENAI_MODEL || "o3-mini";
+const API_MODEL = process.env.AZURE_OPENAI_MODEL || "gpt-35-turbo";
 const API_VERSION = process.env.AZURE_OPENAI_API_VERSION || "2023-05-15";
 
 if (!API_URL || !API_KEY) {
@@ -12,6 +10,8 @@ if (!API_URL || !API_KEY) {
 
 export async function generateCompletion(prompt: string, maxTokens: number = 4000): Promise<string> {
   try {
+    console.log(`Using Azure OpenAI deployment: ${API_MODEL}`);
+    
     const response = await fetch(`${API_URL}/openai/deployments/${API_MODEL}/chat/completions?api-version=${API_VERSION}`, {
       method: "POST",
       headers: {
@@ -36,13 +36,14 @@ export async function generateCompletion(prompt: string, maxTokens: number = 400
 
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(`OpenAI API error: ${response.status} ${text}`);
+      console.error(`Azure OpenAI API error: ${response.status} ${text}`);
+      throw new Error(`Azure OpenAI API error: ${response.status} ${text}`);
     }
 
     const data = await response.json();
     return data.choices[0].message.content;
   } catch (error) {
-    console.error("Error generating OpenAI completion:", error);
+    console.error("Error generating Azure OpenAI completion:", error);
     throw new Error("Failed to generate content. Please try again later.");
   }
 }
@@ -53,6 +54,8 @@ export async function generateWithFunctionCalling<T>(
   functionName: string
 ): Promise<T> {
   try {
+    console.log(`Using Azure OpenAI deployment: ${API_MODEL} for function calling`);
+    
     const response = await fetch(`${API_URL}/openai/deployments/${API_MODEL}/chat/completions?api-version=${API_VERSION}`, {
       method: "POST",
       headers: {
@@ -83,7 +86,8 @@ export async function generateWithFunctionCalling<T>(
 
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(`OpenAI API error: ${response.status} ${text}`);
+      console.error(`Azure OpenAI API error: ${response.status} ${text}`);
+      throw new Error(`Azure OpenAI API error: ${response.status} ${text}`);
     }
 
     const data = await response.json();
@@ -96,7 +100,7 @@ export async function generateWithFunctionCalling<T>(
     const parsedArguments = JSON.parse(functionCall.arguments);
     return parsedArguments as T;
   } catch (error) {
-    console.error("Error using OpenAI function calling:", error);
+    console.error("Error using Azure OpenAI function calling:", error);
     throw new Error("Failed to generate structured content. Please try again later.");
   }
 }
