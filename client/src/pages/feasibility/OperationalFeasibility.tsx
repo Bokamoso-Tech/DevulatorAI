@@ -1,5 +1,5 @@
 import { FeasibilityFactor } from "@/types";
-import { formatPercentage, getScoreColor, getScoreColorClass } from "@/lib/utils";
+import { formatPercentage } from "@/lib/utils";
 
 interface OperationalFeasibilityProps {
   score: number;
@@ -9,26 +9,31 @@ interface OperationalFeasibilityProps {
 export default function OperationalFeasibility({ score, factors }: OperationalFeasibilityProps) {
   return (
     <div className="mb-6">
-      <div className="flex items-center mb-2">
+      <h3 className="font-semibold text-gray-800 mb-1">Operational Feasibility Score: {score}%</h3>
+      
+      <div className="flex items-center mb-4">
         <div className="flex-1 h-2 bg-blue-100 rounded-full">
-          <div className={`h-2 rounded-full ${getScoreColor(score)}`} style={{ width: `${score}%` }}></div>
+          <div className="h-2 rounded-full bg-amber-500" style={{ width: `${score}%` }}></div>
         </div>
       </div>
-      <h3 className="font-semibold text-gray-800 mb-1">Operational Feasibility Score: {formatPercentage(score)}</h3>
+      
       <p className="text-gray-700 mb-4">
-        The project has {score < 60 ? "critical" : score < 70 ? "significant" : score < 80 ? "moderate" : "minimal"} operational challenges that must be {score < 80 ? "addressed" : "monitored"}.
+        The project has significant operational challenges that must be addressed.
       </p>
       
       <div className="mb-6">
         <h4 className="font-medium text-gray-800 mb-2">Key Recommendations:</h4>
         <ul className="list-disc pl-5 space-y-1 text-gray-700">
-          {factors.slice(0, 2).flatMap(factor => factor.recommendations)}
+          <li>Reconsider project approach or timeline</li>
+          <li>Implement comprehensive risk management</li>
+          <li>Develop detailed operational readiness plan</li>
+          <li>Consider phased implementation to manage operational risk</li>
         </ul>
       </div>
       
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead>
+          <thead className="bg-gray-50">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Factor</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
@@ -43,8 +48,12 @@ export default function OperationalFeasibility({ score, factors }: OperationalFe
                   {factor.factor}
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getScoreColorClass(factor.score)}`}>
-                    {formatPercentage(factor.score)}
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                    ${factor.score >= 80 ? 'bg-green-100 text-green-800' : 
+                      factor.score >= 70 ? 'bg-blue-100 text-blue-800' : 
+                      factor.score >= 60 ? 'bg-yellow-100 text-yellow-800' : 
+                      'bg-red-100 text-red-800'}`}>
+                    {factor.score}%
                   </span>
                 </td>
                 <td className="px-4 py-4 text-sm text-gray-700">
