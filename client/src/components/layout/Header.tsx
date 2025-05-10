@@ -7,33 +7,33 @@ interface HeaderProps {
 
 export default function Header({ currentStep }: HeaderProps) {
   return (
-    <header className="bg-primary-700 text-white py-4">
+    <header className="bg-blue-800 text-white py-4">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
           <div>
             <h1 className="text-2xl font-semibold">Enhanced Devulator</h1>
-            <p className="text-sm text-blue-200">Project Estimator & RFP Generator for South African Organizations</p>
+            <p className="text-sm text-blue-200">Project Estimator & RFP Generator</p>
           </div>
           <nav className="flex space-x-4 text-sm">
             <Link href="/requirements">
-              <a className={`px-3 py-2 rounded ${currentStep === 'requirements' ? 'bg-primary-600' : 'hover:bg-primary-600'}`}>
+              <span className={`px-3 py-2 rounded cursor-pointer ${currentStep === 'requirements' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}>
                 Requirements
-              </a>
+              </span>
             </Link>
             <Link href="/project-plan">
-              <a className={`px-3 py-2 rounded ${currentStep === 'project-plan' ? 'bg-primary-600' : 'hover:bg-primary-600'}`}>
+              <span className={`px-3 py-2 rounded cursor-pointer ${currentStep === 'project-plan' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}>
                 Project Plan
-              </a>
+              </span>
             </Link>
             <Link href="/feasibility">
-              <a className={`px-3 py-2 rounded ${currentStep === 'feasibility' ? 'bg-primary-600' : 'hover:bg-primary-600'}`}>
+              <span className={`px-3 py-2 rounded cursor-pointer ${currentStep === 'feasibility' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}>
                 Feasibility
-              </a>
+              </span>
             </Link>
             <Link href="/rfp">
-              <a className={`px-3 py-2 rounded ${currentStep === 'rfp' ? 'bg-primary-600' : 'hover:bg-primary-600'}`}>
+              <span className={`px-3 py-2 rounded cursor-pointer ${currentStep === 'rfp' ? 'bg-blue-700' : 'hover:bg-blue-700'}`}>
                 RFP Document
-              </a>
+              </span>
             </Link>
           </nav>
         </div>
