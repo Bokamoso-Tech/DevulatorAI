@@ -1,0 +1,174 @@
+Build a full-stack web application for SMEs and corporate clients to enter software project requirements. The app uses Azure OpenAI APIs to generate:
+
+📄 Cost Estimates
+
+📋 Project Plan
+
+📊 Feasibility Study
+
+📑 Request for Proposal (RFP)
+
+Users can edit and export the generated documents in .docx and .pdf formats.
+
+🧱 Tech Stack
+Frontend: React + TailwindCSS + TipTap or TinyMCE
+
+Backend: Node.js + Express or Python FastAPI
+
+AI: Azure OpenAI (GPT-4 or GPT-3.5 Turbo)
+
+Database: PostgreSQL (via Prisma ORM or Sequelize)
+
+File Export: jsPDF, docx, or html-docx-js
+
+Hosting: Replit, Vercel (for frontend), Azure (for APIs)
+
+🖼️ Core Features
+1. Project Requirements Intake Form
+Collect rich, structured data about the client’s software project.
+
+Fields:
+
+project_name (string)
+
+company_name (string)
+
+industry (enum or string)
+
+contact_email (email)
+
+problem_statement (long text)
+
+product_description (long text)
+
+target_users (text)
+
+key_features (list of strings)
+
+preferred_technologies (optional text)
+
+compliance_requirements (optional text)
+
+budget_range (enum: <ZAR 100K, ZAR 100K–250K, ZAR 250K–500K, ZAR 500K+)
+
+timeline (text or enum: <3 months, 3–6 months, 6+ months)
+
+2. Document Generation Engine
+On submission, backend creates prompts and calls Azure OpenAI API:
+
+Four prompts: one each for Cost Estimate, Project Plan, Feasibility, and RFP
+
+AI response saved to DB and returned to frontend
+
+3. Editable Rich Text Documents
+Use a rich-text editor (TipTap / TinyMCE) for:
+
+Displaying generated docs
+
+Allowing in-browser edits
+
+Download buttons:
+
+Export as .pdf using jspdf
+
+Export as .docx using html-docx-js or similar
+
+🔁 App Flow
+User lands on homepage
+
+Fills out structured requirements form
+
+Form data is sent to backend
+
+Backend builds prompts and calls Azure OpenAI
+
+AI returns generated docs → saved to DB
+
+Frontend renders editable doc areas
+
+User can edit and download/export
+
+📦 Backend Structure
+Express API Endpoints:
+ts
+Copy
+Edit
+POST /api/projects         → Create project, call AI, save docs  
+GET /api/projects/:id      → Get project + documents  
+PUT /api/projects/:id      → Update edited documents  
+GET /api/export/pdf/:id    → Export all docs as PDF  
+GET /api/export/docx/:id   → Export all docs as DOCX  
+Azure OpenAI Prompt Structure:
+Use system and user messages for each function:
+
+Example (Cost Estimate Prompt):
+
+json
+Copy
+Edit
+{
+  "system": "You are a technical project analyst generating accurate cost estimates for custom software projects in South Africa.",
+  "user": "The company is building a CRM system for small law firms. Timeline: 3 months. Key features: Client management, document upload, secure messaging. Budget: ZAR 250,000. Tech preferences: None."
+}
+Repeat similar templates for:
+
+Project Plan: include milestones, deliverables, risks
+
+Feasibility Study: cover technical, timeline, resource, financial feasibility
+
+RFP: follow standard RFP structure (background, objectives, scope, timelines, criteria)
+
+🗃️ Database Schema
+Using PostgreSQL:
+
+prisma
+Copy
+Edit
+model Project {
+  id                    String   @id @default(uuid())
+  projectName           String
+  companyName           String
+  industry              String
+  contactEmail          String
+  problemStatement      String
+  productDescription    String
+  targetUsers           String
+  keyFeatures           String[]
+  preferredTechnologies String?
+  complianceRequirements String?
+  budgetRange           String
+  timeline              String
+  costEstimate          String?
+  projectPlan           String?
+  feasibilityStudy      String?
+  rfpDocument           String?
+  createdAt             DateTime @default(now())
+}
+💾 File Export Strategy
+Use client-side libraries to convert edited HTML from editor to:
+
+.pdf via jspdf or pdfmake
+
+.docx via html-docx-js or mammoth.js
+
+Optionally allow ZIP download of all files
+
+🔐 Security and Rate Limiting
+Use .env to store Azure OpenAI API key
+
+Add basic rate limiting using express-rate-limit
+
+Sanitize all form inputs
+
+Add CAPTCHA or Auth later if needed
+
+🔧 Stretch Goals (Optional)
+Authentication for saving sessions (Auth0 or Supabase)
+
+Document versioning
+
+Collaborator sharing
+
+Dashboard with past projects
+
+Allow user-uploaded supporting docs
