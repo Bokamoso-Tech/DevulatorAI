@@ -7,9 +7,9 @@ interface ProjectMilestonesProps {
 export default function ProjectMilestones({ milestones }: ProjectMilestonesProps) {
   return (
     <div className="mt-8">
-      <h4 className="text-lg font-medium mb-4">Project Milestones</h4>
+      <h4 className="text-lg font-medium text-gray-800 mb-4">Project Milestone Plan</h4>
       
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto bg-white rounded-lg border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -21,25 +21,25 @@ export default function ProjectMilestones({ milestones }: ProjectMilestonesProps
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {milestones.map((milestone, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
                   {milestone.name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 text-sm text-gray-600">
                   {milestone.description}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {milestone.targetDate}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="w-32">
-                    <div className="h-2 bg-gray-200 rounded">
+                    <div className="h-2 bg-gray-200 rounded-full">
                       <div 
-                        className="h-2 bg-secondary rounded" 
+                        className="h-2 bg-blue-500 rounded-full" 
                         style={{ width: `${milestone.progress}%` }}
                       ></div>
                     </div>
-                    <div className="text-xs text-right mt-1 text-gray-500">
+                    <div className="text-xs text-right mt-1 text-gray-600 font-medium">
                       {milestone.progress}%
                     </div>
                   </div>

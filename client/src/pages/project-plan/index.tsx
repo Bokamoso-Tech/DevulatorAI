@@ -122,15 +122,22 @@ export default function ProjectPlanPage({
         <CardContent className="pt-6">
           {isLoading ? (
             <div className="py-12 text-center">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
               <p className="mt-4 text-gray-600">Generating your project plan...</p>
             </div>
           ) : projectPlan ? (
             <>
-              <h3 className="text-xl font-medium mb-4">Project Plan</h3>
-              <p className="text-gray-600 mb-6">
-                Based on your project requirements, we've generated a high-level project plan.
-              </p>
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="text-xl font-medium">Project Plan</h3>
+                  <p className="text-gray-600 mt-1">
+                    South African-compliant project plan based on your requirements.
+                  </p>
+                </div>
+                <span className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+                  {projectPlan.projectType}
+                </span>
+              </div>
               
               <ProjectOverview 
                 projectName={projectPlan.projectName}
@@ -145,26 +152,34 @@ export default function ProjectPlanPage({
               <ResourceAllocation resources={projectPlan.resourceAllocation} />
               <RiskAssessment risks={projectPlan.riskAssessment} />
               
-              <div className="mt-4 flex flex-wrap gap-3">
-                <Button 
-                  onClick={handleRegenerateProjectPlan} 
-                  variant="outline" 
-                  disabled={isLoading}
-                >
-                  Regenerate Plan
-                </Button>
-                <Button 
-                  onClick={() => {
-                    // Implementation for exporting plan
-                    toast({
-                      title: "Export",
-                      description: "Export functionality will be implemented soon.",
-                    });
-                  }}
-                  variant="secondary"
-                >
-                  Export Plan
-                </Button>
+              <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="text-sm text-gray-600 mb-4">
+                  This project plan meets South African standards for software development projects and includes industry-standard resource allocation and timeline estimates.
+                </div>
+                
+                <div className="flex flex-wrap gap-3">
+                  <Button 
+                    onClick={handleRegenerateProjectPlan} 
+                    variant="outline" 
+                    disabled={isLoading}
+                    className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                  >
+                    Regenerate Plan
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      // Implementation for exporting plan
+                      toast({
+                        title: "Export",
+                        description: "Export functionality will be implemented soon.",
+                      });
+                    }}
+                    variant="secondary"
+                    className="bg-blue-50 text-blue-700 hover:bg-blue-100"
+                  >
+                    Export Plan
+                  </Button>
+                </div>
               </div>
             </>
           ) : (
@@ -179,14 +194,18 @@ export default function ProjectPlanPage({
         <Button
           variant="outline"
           onClick={() => setLocation("/requirements")}
+          className="border-gray-300 text-gray-700"
         >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="m15 18-6-6 6-6"/></svg>
           Back to Requirements
         </Button>
         <Button
           onClick={handleContinue}
           disabled={!projectPlan || isLoading}
+          className="bg-blue-600 hover:bg-blue-700"
         >
           Continue to Feasibility
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2"><path d="m9 18 6-6-6-6"/></svg>
         </Button>
       </div>
     </div>

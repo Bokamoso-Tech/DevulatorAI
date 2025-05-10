@@ -1,4 +1,4 @@
-import { apiRequest } from "./generators/prompts";
+// Import necessary modules for OpenAI API integration
 
 // Configure the OpenAI client
 const API_URL = process.env.AZURE_OPENAI_ENDPOINT || "";
