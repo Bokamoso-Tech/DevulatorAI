@@ -1,7 +1,8 @@
 // Configure the Azure OpenAI client
 const API_URL = process.env.AZURE_OPENAI_ENDPOINT || "";
 const API_KEY = process.env.AZURE_OPENAI_API_KEY || "";
-const API_MODEL = process.env.AZURE_OPENAI_MODEL || "gpt-35-turbo";
+// Override API_MODEL with the correct deployment name "o3-mini-2"
+const API_MODEL = "o3-mini-2"; // Using the correct deployment name instead of environment variable
 const API_VERSION = process.env.AZURE_OPENAI_API_VERSION || "2023-05-15";
 
 if (!API_URL || !API_KEY) {
