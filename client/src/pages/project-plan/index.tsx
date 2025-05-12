@@ -53,8 +53,9 @@ export default function ProjectPlanPage({
           projectRequirement
         );
         
-        const data = await response.json();
-        setProjectPlan(data);
+        const result = await response.json();
+        setProjectPlan(result.data);
+        setUsedFallback(result.usedFallback);
       } catch (error) {
         console.error("Error generating project plan:", error);
         toast({
@@ -94,8 +95,9 @@ export default function ProjectPlanPage({
         projectRequirement
       );
       
-      const data = await response.json();
-      setProjectPlan(data);
+      const result = await response.json();
+      setProjectPlan(result.data);
+      setUsedFallback(result.usedFallback);
       toast({
         title: "Success",
         description: "Project plan regenerated successfully.",
@@ -129,6 +131,7 @@ export default function ProjectPlanPage({
             </div>
           ) : projectPlan ? (
             <>
+              <FallbackNotification isVisible={usedFallback} documentType="Project Plan" />
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h3 className="text-xl font-medium">Project Plan</h3>

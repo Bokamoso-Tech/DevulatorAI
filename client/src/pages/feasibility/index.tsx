@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { apiRequest } from "@/lib/queryClient";
 import { ProjectRequirement, ProjectPlan, FeasibilityStudy } from "@/types";
 import { formatPercentage } from "@/lib/utils";
+import { FallbackNotification } from "@/components/ui/fallback-notification";
 
 import TechnicalFeasibility from "./TechnicalFeasibility";
 import FinancialFeasibility from "./FinancialFeasibility";
@@ -30,6 +31,7 @@ export default function FeasibilityPage({
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("technical");
   const [feasibilityStudy, setFeasibilityStudy] = useState<FeasibilityStudy | undefined>(initialFeasibilityStudy);
+  const [usedFallback, setUsedFallback] = useState(false);
   
   // Check if we have the required data
   useEffect(() => {
@@ -61,8 +63,9 @@ export default function FeasibilityPage({
           { projectRequirement, projectPlan }
         );
         
-        const data = await response.json();
-        setFeasibilityStudy(data);
+        const result = await response.json();
+        setFeasibilityStudy(result.data);
+        setUsedFallback(result.usedFallback);
       } catch (error) {
         console.error("Error generating feasibility study:", error);
         toast({
