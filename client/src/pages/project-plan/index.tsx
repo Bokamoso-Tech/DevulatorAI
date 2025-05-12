@@ -9,6 +9,7 @@ import ProjectOverview from "./ProjectOverview";
 import ProjectMilestones from "./ProjectMilestones";
 import ResourceAllocation from "./ResourceAllocation";
 import RiskAssessment from "./RiskAssessment";
+import { FallbackNotification } from "@/components/ui/fallback-notification";
 
 interface ProjectPlanPageProps {
   projectRequirement?: ProjectRequirement;
@@ -25,6 +26,7 @@ export default function ProjectPlanPage({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [projectPlan, setProjectPlan] = useState<ProjectPlan | undefined>(initialProjectPlan);
+  const [usedFallback, setUsedFallback] = useState(false);
   
   // Check if we have the required data
   useEffect(() => {

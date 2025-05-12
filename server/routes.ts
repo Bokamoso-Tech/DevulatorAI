@@ -10,8 +10,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/project-plan/generate", async (req, res) => {
     try {
       const projectRequirement = req.body;
-      const projectPlan = await generateProjectPlan(projectRequirement);
-      res.json(projectPlan);
+      const result = await generateProjectPlan(projectRequirement);
+      res.json({
+        data: result.data,
+        usedFallback: result.usedFallback
+      });
     } catch (error) {
       console.error("Error generating project plan:", error);
       res.status(500).json({ message: "Failed to generate project plan" });
@@ -22,11 +25,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/feasibility/generate", async (req, res) => {
     try {
       const { projectRequirement, projectPlan } = req.body;
-      const feasibilityStudy = await generateFeasibilityStudy(
+      const result = await generateFeasibilityStudy(
         projectRequirement,
         projectPlan
       );
-      res.json(feasibilityStudy);
+      res.json({
+        data: result.data,
+        usedFallback: result.usedFallback
+      });
     } catch (error) {
       console.error("Error generating feasibility study:", error);
       res.status(500).json({ message: "Failed to generate feasibility study" });
@@ -37,13 +43,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/rfp/generate", async (req, res) => {
     try {
       const { projectRequirement, projectPlan, feasibilityStudy, documentType } = req.body;
-      const rfpDocument = await generateRfpDocument(
+      const result = await generateRfpDocument(
         projectRequirement,
         projectPlan,
         feasibilityStudy,
         documentType || "standard"
       );
-      res.json(rfpDocument);
+      res.json({
+        data: result.data,
+        usedFallback: result.usedFallback
+      });
     } catch (error) {
       console.error("Error generating RFP document:", error);
       res.status(500).json({ message: "Failed to generate RFP document" });

@@ -139,7 +139,7 @@ function generateLocalProjectPlan(projectRequirement: ProjectRequirement): Proje
   };
 }
 
-export async function generateProjectPlan(projectRequirement: ProjectRequirement): Promise<ProjectPlan> {
+export async function generateProjectPlan(projectRequirement: ProjectRequirement): Promise<{data: ProjectPlan, usedFallback: boolean}> {
   try {
     console.log("Generating project plan for:", projectRequirement.name);
     
@@ -154,19 +154,19 @@ export async function generateProjectPlan(projectRequirement: ProjectRequirement
         "generate_project_plan"
       );
       
-      return result;
+      return { data: result, usedFallback: false };
     } catch (aiError) {
       console.error("Error calling OpenAI API, falling back to local generation:", aiError);
       
       // If OpenAI fails, use the local generator as a fallback
       console.log("Using local project plan generator as fallback");
-      return generateLocalProjectPlan(projectRequirement);
+      return { data: generateLocalProjectPlan(projectRequirement), usedFallback: true };
     }
   } catch (error) {
     console.error("Error generating project plan:", error);
     
     // Final fallback if even the local generator fails
     console.log("All generation attempts failed, using emergency fallback");
-    return generateLocalProjectPlan(projectRequirement);
+    return { data: generateLocalProjectPlan(projectRequirement), usedFallback: true };
   }
 }

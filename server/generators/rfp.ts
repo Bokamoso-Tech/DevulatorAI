@@ -152,7 +152,7 @@ export async function generateRfpDocument(
   projectPlan: ProjectPlan,
   feasibilityStudy: FeasibilityStudy,
   documentType: string = "standard"
-): Promise<RfpDocument> {
+): Promise<{data: RfpDocument, usedFallback: boolean}> {
   try {
     console.log("Generating RFP document for:", projectRequirement.name);
     
@@ -172,19 +172,25 @@ export async function generateRfpDocument(
         "generate_rfp_document"
       );
       
-      return result;
+      return { data: result, usedFallback: false };
     } catch (aiError) {
       console.error("Error calling OpenAI API for RFP document, falling back to local generation:", aiError);
       
       // If OpenAI fails, use the local generator as a fallback
       console.log("Using local RFP document generator as fallback");
-      return generateLocalRfpDocument(projectRequirement, projectPlan, feasibilityStudy, documentType);
+      return { 
+        data: generateLocalRfpDocument(projectRequirement, projectPlan, feasibilityStudy, documentType),
+        usedFallback: true 
+      };
     }
   } catch (error) {
     console.error("Error generating RFP document:", error);
     
     // Final fallback if even the local generator fails
     console.log("All RFP document generation attempts failed, using emergency fallback");
-    return generateLocalRfpDocument(projectRequirement, projectPlan, feasibilityStudy, documentType);
+    return { 
+      data: generateLocalRfpDocument(projectRequirement, projectPlan, feasibilityStudy, documentType),
+      usedFallback: true 
+    };
   }
 }

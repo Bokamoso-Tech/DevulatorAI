@@ -178,7 +178,7 @@ function generateLocalFeasibilityStudy(
 export async function generateFeasibilityStudy(
   projectRequirement: ProjectRequirement,
   projectPlan: ProjectPlan
-): Promise<FeasibilityStudy> {
+): Promise<{data: FeasibilityStudy, usedFallback: boolean}> {
   try {
     console.log("Generating feasibility study for:", projectRequirement.name);
     
@@ -193,19 +193,19 @@ export async function generateFeasibilityStudy(
         "generate_feasibility_study"
       );
       
-      return result;
+      return { data: result, usedFallback: false };
     } catch (aiError) {
       console.error("Error calling OpenAI API for feasibility study, falling back to local generation:", aiError);
       
       // If OpenAI fails, use the local generator as a fallback
       console.log("Using local feasibility study generator as fallback");
-      return generateLocalFeasibilityStudy(projectRequirement, projectPlan);
+      return { data: generateLocalFeasibilityStudy(projectRequirement, projectPlan), usedFallback: true };
     }
   } catch (error) {
     console.error("Error generating feasibility study:", error);
     
     // Final fallback if even the local generator fails
     console.log("All feasibility study generation attempts failed, using emergency fallback");
-    return generateLocalFeasibilityStudy(projectRequirement, projectPlan);
+    return { data: generateLocalFeasibilityStudy(projectRequirement, projectPlan), usedFallback: true };
   }
 }
