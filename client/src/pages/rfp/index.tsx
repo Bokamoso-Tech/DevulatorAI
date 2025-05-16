@@ -70,9 +70,12 @@ export default function RfpPage({
           }
         );
         
-        const data = await response.json();
-        setRfpDocument(data);
-        onSave(data);
+        const result = await response.json();
+        if (!result.data) {
+          throw new Error("No RFP data received from server");
+        }
+        setRfpDocument(result.data);
+        onSave(result.data);
       } catch (error) {
         console.error("Error generating RFP document:", error);
         toast({
