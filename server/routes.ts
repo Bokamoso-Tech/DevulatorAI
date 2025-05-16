@@ -6,6 +6,9 @@ import { generateFeasibilityStudy } from "./generators/feasibility";
 import { generateRfpDocument } from "./generators/rfp";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const httpServer = createServer(app);
+  httpServer.setTimeout(300_000); // 5 minutes timeout
+
   // API routes for project plan generation
   app.post("/api/project-plan/generate", async (req, res) => {
     try {
@@ -13,7 +16,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await generateProjectPlan(projectRequirement);
       res.json({
         data: result.data,
-        usedFallback: result.usedFallback
+        usedFallback: result.usedFallback,
       });
     } catch (error) {
       console.error("Error generating project plan:", error);
@@ -27,11 +30,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { projectRequirement, projectPlan } = req.body;
       const result = await generateFeasibilityStudy(
         projectRequirement,
-        projectPlan
+        projectPlan,
       );
       res.json({
         data: result.data,
-        usedFallback: result.usedFallback
+        usedFallback: result.usedFallback,
       });
     } catch (error) {
       console.error("Error generating feasibility study:", error);
@@ -41,25 +44,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // API routes for RFP document generation
   app.post("/api/rfp/generate", async (req, res) => {
-    try {
-      const { projectRequirement, projectPlan, feasibilityStudy, documentType } = req.body;
+    /*try {
+      const {
+        projectRequirement,
+        projectPlan,
+        feasibilityStudy,
+        documentType,
+      } = req.body;
       const result = await generateRfpDocument(
         projectRequirement,
         projectPlan,
         feasibilityStudy,
-        documentType || "standard"
+        documentType || "standard",
       );
       res.json({
         data: result.data,
-        usedFallback: result.usedFallback
+        usedFallback: result.usedFallback,
       });
+
+      res.json(result.data);
     } catch (error) {
       console.error("Error generating RFP document:", error);
       res.status(500).json({ message: "Failed to generate RFP document" });
     }
-  });
+  }*/
+    console.log("Starting fake RFP generation");
+      await new Promise((resolve) => setTimeout(resolve, 10000)); // simulate 10s work
+      console.log("Done with fake RFP generation");
 
-  const httpServer = createServer(app);
+      res.json({ data: "Fake RFP complete", usedFallback: false });
+    });
+
+  //const httpServer = createServer(app);
 
   return httpServer;
 }
