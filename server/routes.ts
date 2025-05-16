@@ -61,8 +61,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         data: result.data,
         usedFallback: result.usedFallback,
       });
-
-      res.json(result.data);
     } catch (error) {
       console.error("Error generating RFP document:", error);
       res.status(500).json({ message: "Failed to generate RFP document" });
