@@ -32,7 +32,7 @@ export default function RfpPage({
   const [isLoading, setIsLoading] = useState(false);
   const [rfpDocument, setRfpDocument] = useState<RfpDocument | undefined>(initialRfpDocument);
   const [documentType, setDocumentType] = useState<string>("standard");
-  
+
   // Check if we have the required data
   useEffect(() => {
     if (!projectRequirement || !projectPlan || !feasibilityStudy) {
@@ -41,7 +41,7 @@ export default function RfpPage({
         description: "Please complete the previous steps first.",
         variant: "destructive",
       });
-      
+
       if (!projectRequirement) {
         setLocation("/requirements");
       } else if (!projectPlan) {
@@ -51,12 +51,12 @@ export default function RfpPage({
       }
     }
   }, [projectRequirement, projectPlan, feasibilityStudy, setLocation, toast]);
-  
+
   // If we don't have an RFP document yet, generate one
   useEffect(() => {
     const generateRfpDocument = async () => {
       if (!projectRequirement || !projectPlan || !feasibilityStudy || rfpDocument) return;
-      
+
       setIsLoading(true);
       try {
         const response = await apiRequest(
@@ -69,7 +69,7 @@ export default function RfpPage({
             documentType
           }
         );
-        
+
         const result = await response.json();
         if (!result.data) {
           throw new Error("No RFP data received from server");
@@ -87,13 +87,13 @@ export default function RfpPage({
         setIsLoading(false);
       }
     };
-    
+
     generateRfpDocument();
   }, [projectRequirement, projectPlan, feasibilityStudy, rfpDocument, documentType, onSave, toast]);
-  
+
   const handleRegenerateRfpDocument = async () => {
     if (!projectRequirement || !projectPlan || !feasibilityStudy) return;
-    
+
     setIsLoading(true);
     try {
       const response = await apiRequest(
@@ -106,7 +106,7 @@ export default function RfpPage({
           documentType
         }
       );
-      
+
       const result = await response.json();
       setRfpDocument(result.data);
       onSave(result.data);
@@ -125,10 +125,10 @@ export default function RfpPage({
       setIsLoading(false);
     }
   };
-  
+
   const handleDocumentTypeChange = async (value: string) => {
     if (value === documentType) return;
-    
+
     setDocumentType(value);
     if (projectRequirement && projectPlan && feasibilityStudy) {
       setIsLoading(true);
@@ -143,7 +143,7 @@ export default function RfpPage({
             documentType: value
           }
         );
-        
+
         const data = await response.json();
         setRfpDocument(data);
         onSave(data);
@@ -159,15 +159,15 @@ export default function RfpPage({
       }
     }
   };
-  
+
   if (!projectRequirement || !projectPlan || !feasibilityStudy) {
     return null; // Will redirect in useEffect
   }
-  
+
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">RFP Document Generation</h2>
-      
+
       <Card className="mb-6">
         <CardContent className="pt-6">
           {isLoading ? (
@@ -192,14 +192,14 @@ export default function RfpPage({
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-8">
                 {rfpDocument?.sections?.map((section, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-6">
                     <h4 className="text-lg font-semibold mb-4">{section.title}</h4>
                     <div className="prose max-w-none">
                       <p>{section.content}</p>
-                      
+
                       {section.subsections && section.subsections.length > 0 && (
                         <div className="mt-4 space-y-4">
                           {section.subsections.map((subsection, subIndex) => (
@@ -214,7 +214,7 @@ export default function RfpPage({
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button 
                   onClick={handleRegenerateRfpDocument} 
@@ -225,15 +225,39 @@ export default function RfpPage({
                 </Button>
                 <Button 
                   onClick={() => {
-                    // Implementation for exporting RFP
-                    toast({
-                      title: "Export",
-                      description: "Export functionality will be implemented soon.",
-                    });
-                  }}
-                  variant="secondary"
-                >
-                  Export RFP
+                      if (!rfpDocument) return;
+
+                      import('@react-pdf/renderer').then(({ pdf }) => {
+                        import('@/components/pdf/RfpPdf').then(({ RfpPdf }) => {
+                          pdf(<RfpPdf rfpDocument={rfpDocument} />)
+                            .toBlob()
+                            .then((blob) => {
+                              const url = URL.createObjectURL(blob);
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = 'rfp-document.pdf';
+                              link.click();
+                              URL.revokeObjectURL(url);
+
+                              toast({
+                                title: "Success",
+                                description: "RFP document exported successfully.",
+                              });
+                            })
+                            .catch((error) => {
+                              console.error('Error generating PDF:', error);
+                              toast({
+                                title: "Error",
+                                description: "Failed to export RFP document.",
+                                variant: "destructive",
+                              });
+                            });
+                        });
+                      });
+                    }}
+                    variant="secondary"
+                  >
+                    Export RFP
                 </Button>
               </div>
             </>
@@ -244,7 +268,7 @@ export default function RfpPage({
           )}
         </CardContent>
       </Card>
-      
+
       <div className="flex justify-between mt-8">
         <Button
           variant="outline"

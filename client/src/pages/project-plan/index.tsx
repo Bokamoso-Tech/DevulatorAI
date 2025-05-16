@@ -27,7 +27,7 @@ export default function ProjectPlanPage({
   const [isLoading, setIsLoading] = useState(false);
   const [projectPlan, setProjectPlan] = useState<ProjectPlan | undefined>(initialProjectPlan);
   const [usedFallback, setUsedFallback] = useState(false);
-  
+
   // Check if we have the required data
   useEffect(() => {
     if (!projectRequirement) {
@@ -39,12 +39,12 @@ export default function ProjectPlanPage({
       setLocation("/requirements");
     }
   }, [projectRequirement, setLocation, toast]);
-  
+
   // If we don't have a project plan yet, generate one
   useEffect(() => {
     const generateProjectPlan = async () => {
       if (!projectRequirement || projectPlan) return;
-      
+
       setIsLoading(true);
       try {
         const response = await apiRequest(
@@ -52,7 +52,7 @@ export default function ProjectPlanPage({
           "/api/project-plan/generate", 
           projectRequirement
         );
-        
+
         const result = await response.json();
         setProjectPlan(result.data);
         setUsedFallback(result.usedFallback);
@@ -67,10 +67,10 @@ export default function ProjectPlanPage({
         setIsLoading(false);
       }
     };
-    
+
     generateProjectPlan();
   }, [projectRequirement, projectPlan, toast]);
-  
+
   const handleContinue = () => {
     if (projectPlan) {
       onSave(projectPlan);
@@ -83,10 +83,10 @@ export default function ProjectPlanPage({
       });
     }
   };
-  
+
   const handleRegenerateProjectPlan = async () => {
     if (!projectRequirement) return;
-    
+
     setIsLoading(true);
     try {
       const response = await apiRequest(
@@ -94,7 +94,7 @@ export default function ProjectPlanPage({
         "/api/project-plan/generate", 
         projectRequirement
       );
-      
+
       const result = await response.json();
       setProjectPlan(result.data);
       setUsedFallback(result.usedFallback);
@@ -113,15 +113,15 @@ export default function ProjectPlanPage({
       setIsLoading(false);
     }
   };
-  
+
   if (!projectRequirement) {
     return null; // Will redirect in useEffect
   }
-  
+
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">Project Plan Generation</h2>
-      
+
       <Card className="mb-6">
         <CardContent className="pt-6">
           {isLoading ? (
@@ -143,7 +143,7 @@ export default function ProjectPlanPage({
                   {projectPlan.projectType}
                 </span>
               </div>
-              
+
               <ProjectOverview 
                 projectName={projectPlan.projectName}
                 projectType={projectPlan.projectType}
@@ -152,16 +152,16 @@ export default function ProjectPlanPage({
                 startDate={projectPlan.startDate}
                 estimatedCost={projectPlan.estimatedCost}
               />
-              
+
               <ProjectMilestones milestones={projectPlan.milestones} />
               <ResourceAllocation resources={projectPlan.resourceAllocation} />
               <RiskAssessment risks={projectPlan.riskAssessment} />
-              
+
               <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div className="text-sm text-gray-600 mb-4">
                   This project plan meets South African standards for software development projects and includes industry-standard resource allocation and timeline estimates.
                 </div>
-                
+
                 <div className="flex flex-wrap gap-3">
                   <Button 
                     onClick={handleRegenerateProjectPlan} 
@@ -173,10 +173,34 @@ export default function ProjectPlanPage({
                   </Button>
                   <Button 
                     onClick={() => {
-                      // Implementation for exporting plan
-                      toast({
-                        title: "Export",
-                        description: "Export functionality will be implemented soon.",
+                      if (!projectPlan) return;
+
+                      import('@react-pdf/renderer').then(({ pdf }) => {
+                        import('@/components/pdf/ProjectPlanPdf').then(({ ProjectPlanPdf }) => {
+                          pdf(<ProjectPlanPdf projectPlan={projectPlan} />)
+                            .toBlob()
+                            .then((blob) => {
+                              const url = URL.createObjectURL(blob);
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = 'project-plan.pdf';
+                              link.click();
+                              URL.revokeObjectURL(url);
+
+                              toast({
+                                title: "Success",
+                                description: "Project plan exported successfully.",
+                              });
+                            })
+                            .catch((error) => {
+                              console.error('Error generating PDF:', error);
+                              toast({
+                                title: "Error",
+                                description: "Failed to export project plan.",
+                                variant: "destructive",
+                              });
+                            });
+                        });
                       });
                     }}
                     variant="secondary"
@@ -194,7 +218,7 @@ export default function ProjectPlanPage({
           )}
         </CardContent>
       </Card>
-      
+
       <div className="flex justify-between mt-8">
         <Button
           variant="outline"

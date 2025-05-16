@@ -32,7 +32,7 @@ export default function FeasibilityPage({
   const [activeTab, setActiveTab] = useState("technical");
   const [feasibilityStudy, setFeasibilityStudy] = useState<FeasibilityStudy | undefined>(initialFeasibilityStudy);
   const [usedFallback, setUsedFallback] = useState(false);
-  
+
   // Check if we have the required data
   useEffect(() => {
     if (!projectRequirement || !projectPlan) {
@@ -41,7 +41,7 @@ export default function FeasibilityPage({
         description: "Please complete the previous steps first.",
         variant: "destructive",
       });
-      
+
       if (!projectRequirement) {
         setLocation("/requirements");
       } else if (!projectPlan) {
@@ -49,12 +49,12 @@ export default function FeasibilityPage({
       }
     }
   }, [projectRequirement, projectPlan, setLocation, toast]);
-  
+
   // If we don't have a feasibility study yet, generate one
   useEffect(() => {
     const generateFeasibilityStudy = async () => {
       if (!projectRequirement || !projectPlan || feasibilityStudy) return;
-      
+
       setIsLoading(true);
       try {
         const response = await apiRequest(
@@ -62,7 +62,7 @@ export default function FeasibilityPage({
           "/api/feasibility/generate", 
           { projectRequirement, projectPlan }
         );
-        
+
         const result = await response.json();
         setFeasibilityStudy(result.data);
         setUsedFallback(result.usedFallback);
@@ -77,10 +77,10 @@ export default function FeasibilityPage({
         setIsLoading(false);
       }
     };
-    
+
     generateFeasibilityStudy();
   }, [projectRequirement, projectPlan, feasibilityStudy, toast]);
-  
+
   const handleContinue = () => {
     if (feasibilityStudy) {
       onSave(feasibilityStudy);
@@ -93,10 +93,10 @@ export default function FeasibilityPage({
       });
     }
   };
-  
+
   const handleRegenerateFeasibilityStudy = async () => {
     if (!projectRequirement || !projectPlan) return;
-    
+
     setIsLoading(true);
     try {
       const response = await apiRequest(
@@ -104,7 +104,7 @@ export default function FeasibilityPage({
         "/api/feasibility/generate", 
         { projectRequirement, projectPlan }
       );
-      
+
       const data = await response.json();
       setFeasibilityStudy(data);
       toast({
@@ -122,15 +122,15 @@ export default function FeasibilityPage({
       setIsLoading(false);
     }
   };
-  
+
   if (!projectRequirement || !projectPlan) {
     return null; // Will redirect in useEffect
   }
-  
+
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">Feasibility Analysis</h2>
-      
+
       <Card className="mb-6">
         <CardContent className="pt-6">
           {isLoading ? (
@@ -152,7 +152,7 @@ export default function FeasibilityPage({
                   <span className="text-sm text-gray-600">Overall Score</span>
                 </div>
               </div>
-              
+
               {/* Overall Score Visualization */}
               <div className="flex flex-col md:flex-row gap-6 mb-8">
                 <div className="flex-1 bg-white p-4 rounded-lg border border-gray-200">
@@ -164,7 +164,7 @@ export default function FeasibilityPage({
                     <div className="h-2 rounded-full bg-amber-500" style={{ width: `${feasibilityStudy.technicalScore}%` }}></div>
                   </div>
                 </div>
-                
+
                 <div className="flex-1 bg-white p-4 rounded-lg border border-gray-200">
                   <div className="flex justify-between mb-2">
                     <span className="text-sm font-semibold text-gray-600">FINANCIAL</span>
@@ -174,7 +174,7 @@ export default function FeasibilityPage({
                     <div className="h-2 rounded-full bg-amber-500" style={{ width: `${feasibilityStudy.financialScore}%` }}></div>
                   </div>
                 </div>
-                
+
                 <div className="flex-1 bg-white p-4 rounded-lg border border-gray-200">
                   <div className="flex justify-between mb-2">
                     <span className="text-sm font-semibold text-gray-600">OPERATIONAL</span>
@@ -185,13 +185,13 @@ export default function FeasibilityPage({
                   </div>
                 </div>
               </div>
-              
+
               {/* Recommendation Section */}
               <div className="bg-blue-50 rounded-lg p-6 mb-6">
                 <h4 className="text-lg font-medium mb-4">Project Recommendation</h4>
-                
+
                 <p className="text-gray-700 mb-4">{feasibilityStudy.recommendation}</p>
-                
+
                 <h5 className="font-medium mb-2">Recommended Next Steps:</h5>
                 <ul className="list-disc pl-5 space-y-1 text-gray-700">
                   {feasibilityStudy.nextSteps.map((step, index) => (
@@ -199,7 +199,7 @@ export default function FeasibilityPage({
                   ))}
                 </ul>
               </div>
-              
+
               {/* Feasibility Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="mb-6 w-full bg-gray-50 border-b rounded-none justify-start space-x-2">
@@ -222,14 +222,14 @@ export default function FeasibilityPage({
                     Operational
                   </TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="technical">
                   <TechnicalFeasibility 
                     score={feasibilityStudy.technicalScore}
                     factors={feasibilityStudy.technicalFactors}
                   />
                 </TabsContent>
-                
+
                 <TabsContent value="financial">
                   <FinancialFeasibility 
                     score={feasibilityStudy.financialScore}
@@ -237,7 +237,7 @@ export default function FeasibilityPage({
                     financialData={feasibilityStudy.financialData}
                   />
                 </TabsContent>
-                
+
                 <TabsContent value="operational">
                   <OperationalFeasibility 
                     score={feasibilityStudy.operationalScore}
@@ -245,12 +245,12 @@ export default function FeasibilityPage({
                   />
                 </TabsContent>
               </Tabs>
-              
+
               <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div className="text-sm text-gray-600 mb-4">
                   This feasibility analysis is based on the information provided and industry standards for similar projects in South Africa.
                 </div>
-                
+
                 <div className="flex flex-wrap gap-3">
                   <Button 
                     onClick={handleRegenerateFeasibilityStudy} 
@@ -262,10 +262,34 @@ export default function FeasibilityPage({
                   </Button>
                   <Button 
                     onClick={() => {
-                      // Implementation for exporting analysis
-                      toast({
-                        title: "Export",
-                        description: "Export functionality will be implemented soon.",
+                      if (!feasibilityStudy) return;
+
+                      import('@react-pdf/renderer').then(({ pdf }) => {
+                        import('@/components/pdf/FeasibilityPdf').then(({ FeasibilityPdf }) => {
+                          pdf(<FeasibilityPdf feasibilityStudy={feasibilityStudy} />)
+                            .toBlob()
+                            .then((blob) => {
+                              const url = URL.createObjectURL(blob);
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = 'feasibility-study.pdf';
+                              link.click();
+                              URL.revokeObjectURL(url);
+
+                              toast({
+                                title: "Success",
+                                description: "Feasibility study exported successfully.",
+                              });
+                            })
+                            .catch((error) => {
+                              console.error('Error generating PDF:', error);
+                              toast({
+                                title: "Error",
+                                description: "Failed to export feasibility study.",
+                                variant: "destructive",
+                              });
+                            });
+                        });
                       });
                     }}
                     variant="secondary"
@@ -283,7 +307,7 @@ export default function FeasibilityPage({
           )}
         </CardContent>
       </Card>
-      
+
       <div className="flex justify-between mt-8">
         <Button
           variant="outline"
