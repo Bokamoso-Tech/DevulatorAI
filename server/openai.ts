@@ -112,8 +112,10 @@ export async function generateWithFunctionCalling<T>(
 // Configure the Azure OpenAI client
 const API_URL = process.env.AZURE_OPENAI_ENDPOINT || "";
 const API_KEY = process.env.AZURE_OPENAI_API_KEY || "";
-const API_MODEL = "o3-mini-2";
-const API_VERSION = "2024-12-01-preview";
+//const API_MODEL = "o3-mini-2";
+//const API_VERSION = "2024-12-01-preview";
+const API_MODEL   = process.env.AZURE_OPENAI_MODEL      || "o3-mini-2";
+const API_VERSION = process.env.AZURE_OPENAI_API_VERSION || "2024-12-01-preview";
 
 if (!API_URL || !API_KEY) {
   console.error(
