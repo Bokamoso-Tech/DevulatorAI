@@ -1,17 +1,65 @@
-
 import { Document, Page, Text, StyleSheet, View } from '@react-pdf/renderer';
 import { ProjectPlan } from '@/types';
 
 const styles = StyleSheet.create({
-  page: { padding: 30 },
-  title: { fontSize: 24, marginBottom: 20 },
-  section: { marginBottom: 20 },
-  sectionTitle: { fontSize: 18, marginBottom: 10 },
-  content: { fontSize: 12, lineHeight: 1.5 },
-  table: { width: '100%', marginBottom: 10 },
-  tableRow: { flexDirection: 'row', borderBottomWidth: 1, borderColor: '#EEE', padding: 5 },
-  tableHeader: { fontWeight: 'bold' },
-  tableCell: { flex: 1 }
+  page: { 
+    padding: 30,
+    backgroundColor: '#ffffff'
+  },
+  title: { 
+    fontSize: 24, 
+    marginBottom: 20,
+    color: '#1a1a1a',
+    fontWeight: 'bold'
+  },
+  section: { 
+    marginBottom: 20,
+    backgroundColor: '#f9fafb',
+    padding: 15,
+    borderRadius: 4
+  },
+  sectionTitle: { 
+    fontSize: 18, 
+    marginBottom: 10,
+    color: '#2563eb',
+    fontWeight: 'bold'
+  },
+  content: { 
+    fontSize: 12, 
+    lineHeight: 1.5,
+    color: '#4b5563'
+  },
+  table: { 
+    width: '100%', 
+    marginBottom: 10 
+  },
+  tableRow: { 
+    flexDirection: 'row', 
+    borderBottomWidth: 1, 
+    borderColor: '#e5e7eb', 
+    padding: 8,
+    backgroundColor: '#ffffff',
+    marginBottom: 4
+  },
+  tableHeader: { 
+    backgroundColor: '#f3f4f6',
+    fontWeight: 'bold'
+  },
+  tableCell: { 
+    flex: 1,
+    padding: 4
+  },
+  progressBar: {
+    width: '100%',
+    height: 8,
+    backgroundColor: '#e5e7eb',
+    borderRadius: 4
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#2563eb',
+    borderRadius: 4
+  }
 });
 
 interface ProjectPlanPdfProps {

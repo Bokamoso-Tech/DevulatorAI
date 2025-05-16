@@ -1,15 +1,59 @@
-
 import { Document, Page, Text, StyleSheet, View } from '@react-pdf/renderer';
 import { FeasibilityStudy } from '@/types';
 
 const styles = StyleSheet.create({
-  page: { padding: 30 },
-  title: { fontSize: 24, marginBottom: 20 },
-  section: { marginBottom: 20 },
-  sectionTitle: { fontSize: 18, marginBottom: 10 },
-  content: { fontSize: 12, lineHeight: 1.5 },
-  scoreSection: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-  score: { fontSize: 16, fontWeight: 'bold' }
+  page: { 
+    padding: 30,
+    backgroundColor: '#ffffff'
+  },
+  title: { 
+    fontSize: 24, 
+    marginBottom: 20,
+    color: '#1a1a1a',
+    fontWeight: 'bold'
+  },
+  section: { 
+    marginBottom: 20,
+    backgroundColor: '#f9fafb',
+    padding: 15,
+    borderRadius: 4
+  },
+  sectionTitle: { 
+    fontSize: 18, 
+    marginBottom: 10,
+    color: '#2563eb',
+    fontWeight: 'bold'
+  },
+  content: { 
+    fontSize: 12, 
+    lineHeight: 1.5,
+    color: '#4b5563'
+  },
+  scoreSection: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    marginBottom: 20,
+    backgroundColor: '#f3f4f6',
+    padding: 12,
+    borderRadius: 4
+  },
+  score: { 
+    fontSize: 16, 
+    fontWeight: 'bold',
+    color: '#2563eb'
+  },
+  progressBar: {
+    width: '100%',
+    height: 8,
+    backgroundColor: '#e5e7eb',
+    borderRadius: 4,
+    marginTop: 4
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#2563eb',
+    borderRadius: 4
+  }
 });
 
 interface FeasibilityPdfProps {
