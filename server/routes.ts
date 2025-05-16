@@ -44,7 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // API routes for RFP document generation
   app.post("/api/rfp/generate", async (req, res) => {
-    /*try {
+    try {
       const {
         projectRequirement,
         projectPlan,
@@ -67,13 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error generating RFP document:", error);
       res.status(500).json({ message: "Failed to generate RFP document" });
     }
-  }*/
-    console.log("Starting fake RFP generation");
-      await new Promise((resolve) => setTimeout(resolve, 10000)); // simulate 10s work
-      console.log("Done with fake RFP generation");
-
-      res.json({ data: "Fake RFP complete", usedFallback: false });
-    });
+  });
 
   //const httpServer = createServer(app);
 
