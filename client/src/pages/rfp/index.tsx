@@ -191,7 +191,7 @@ export default function RfpPage({
               </div>
               
               <div className="space-y-8">
-                {rfpDocument.sections.map((section, index) => (
+                {rfpDocument?.sections?.map((section, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-6">
                     <h4 className="text-lg font-semibold mb-4">{section.title}</h4>
                     <div className="prose max-w-none">
