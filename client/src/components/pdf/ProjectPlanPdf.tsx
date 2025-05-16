@@ -4,19 +4,22 @@ import { ProjectPlan } from '@/types';
 const styles = StyleSheet.create({
   page: { 
     padding: 30,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    fontFamily: 'Helvetica'
   },
   title: { 
     fontSize: 24, 
-    marginBottom: 20,
-    color: '#1a1a1a',
-    fontWeight: 'bold'
+    marginBottom: 30,
+    color: '#111827',
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   section: { 
-    marginBottom: 20,
+    marginBottom: 24,
     backgroundColor: '#f9fafb',
-    padding: 15,
-    borderRadius: 4
+    padding: 20,
+    borderRadius: 8,
+    border: '1px solid #e5e7eb'
   },
   sectionTitle: { 
     fontSize: 18, 
