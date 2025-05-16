@@ -20,7 +20,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error("Error generating project plan:", error);
-      res.status(500).json({ message: "Failed to generate project plan" });
+      console.error("Request body:", JSON.stringify(req.body, null, 2));
+      res.status(500).json({ 
+        message: "Failed to generate project plan",
+        error: error instanceof Error ? error.message : String(error)
+      });
     }
   });
 

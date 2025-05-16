@@ -7,6 +7,9 @@ const API_VERSION = process.env.AZURE_OPENAI_API_VERSION || "2023-05-15";
 
 if (!API_URL || !API_KEY) {
   console.error("Azure OpenAI credentials not configured properly!");
+  console.error("API_URL:", API_URL ? "Set" : "Missing");
+  console.error("API_KEY:", API_KEY ? "Set" : "Missing");
+  console.error("API_VERSION:", API_VERSION);
 }
 
 export async function generateCompletion(prompt: string, maxTokens: number = 4000): Promise<string> {
