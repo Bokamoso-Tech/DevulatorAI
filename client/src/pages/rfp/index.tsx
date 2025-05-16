@@ -104,9 +104,9 @@ export default function RfpPage({
         }
       );
       
-      const data = await response.json();
-      setRfpDocument(data);
-      onSave(data);
+      const result = await response.json();
+      setRfpDocument(result.data);
+      onSave(result.data);
       toast({
         title: "Success",
         description: "RFP document regenerated successfully.",
