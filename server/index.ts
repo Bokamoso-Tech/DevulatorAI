@@ -1,7 +1,10 @@
 import express, { type Request, Response, NextFunction } from "express";
-import cors from 'cors';
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -69,7 +72,7 @@ app.use((req, res, next) => {
   }, () => {
     log(`serving on port ${port}`);
   }); */
-  const port = Number(process.env.PORT) || 5000;
+  const port = Number(process.env.PORT) || 5050;
 
   console.log("▶️ ENV PORT =", process.env.PORT);
   console.log("▶️ binding to port =", port);
